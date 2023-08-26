@@ -1,0 +1,9 @@
+.FullscreenFake {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.FullscreenFake[hidden] {
+  display: none;
+}
