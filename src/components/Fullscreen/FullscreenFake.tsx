@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import './FullscreenFake.css';
+import styles from './FullscreenFake.module.css';
 
 export type FullscreenFakeProps = React.PropsWithChildren<{
   className?: string;
@@ -42,10 +42,10 @@ const FullscreenFake: React.ForwardRefRenderFunction<
     document.addEventListener('keydown', handleKeyDown);
 
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [onHide]);
 
   return (
-    <div className={`FullscreenFake ${className || ''}`} hidden={!fullscreen}>
+    <div className={`${styles.fullscreen} ${className || ''}`} hidden={!fullscreen}>
       {children}
     </div>
   );

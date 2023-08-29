@@ -1,9 +1,9 @@
-.FullscreenFake {
+.fullscreen {
   position: absolute;
   inset: 0;
   z-index: 1;
 }
 
-.FullscreenFake[hidden] {
+.fullscreen[hidden] {
   display: none;
 }

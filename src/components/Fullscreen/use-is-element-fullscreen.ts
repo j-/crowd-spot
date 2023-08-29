@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const useIsElementFullscreen = <T extends Element>(ref: React.RefObject<T>) => {
-  const isFullscreenInit = (): boolean => (
+  const isFullscreenInit = useCallback((): boolean => (
     ref.current != null && document.fullscreenElement === ref.current
-  );
+  ), [ref]);
 
   const [isFullscreen, setIsFullscreen] = useState(isFullscreenInit);
 
@@ -22,7 +22,7 @@ export const useIsElementFullscreen = <T extends Element>(ref: React.RefObject<T
     return () => {
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
     };
-  }, []);
+  }, [isFullscreenInit, ref]);
 
   return isFullscreen;
 };

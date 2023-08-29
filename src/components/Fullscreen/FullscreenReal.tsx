@@ -46,7 +46,7 @@ const FullscreenReal: React.ForwardRefRenderFunction<
     document.addEventListener('keydown', handleKeyDown);
 
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [onHide]);
 
   return (
     <div

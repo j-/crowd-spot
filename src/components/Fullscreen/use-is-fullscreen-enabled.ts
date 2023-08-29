@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 
 const fullscreenEnabledInit = () => (
-  document ? document.fullscreenEnabled : false
+  typeof document !== 'undefined' ? document.fullscreenEnabled : false
 );
 
 export const useIsFullscreenEnabled = () => {
-  const [isFullscreenEnabled, setIsFullscreenEnabled] = useState(
-    fullscreenEnabledInit
-  );
+  const [isFullscreenEnabled, setIsFullscreenEnabled] = useState(false);
 
   useEffect(() => {
     setIsFullscreenEnabled(fullscreenEnabledInit);

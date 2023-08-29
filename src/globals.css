@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --app-color-red: hsl(0, 100%, 60%);
+  --app-color-orange: hsl(30, 100%, 50%);
+  --app-color-yellow: hsl(50, 100%, 60%);
+  --app-color-green: hsl(80, 100%, 35%);
+  --app-color-blue: hsl(200, 100%, 50%);
+  --app-color-purple: hsl(270, 100%, 60%);
+  --app-color-pink: hsl(330, 100%, 80%);
+}
