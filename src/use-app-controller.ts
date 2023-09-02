@@ -33,7 +33,7 @@ export type UseAppController = {
 const getDefaultColors = () => rand(combinations) as [AppColor, AppColor];
 
 export const useAppController: UseAppController = () => {
-  const { replace } = useRouter();
+  const { push } = useRouter();
 
   const [[color1, color2], setColors] = useSessionStorageState<[AppColor, AppColor]>(STORAGE_COLORS, {
     defaultValue: getDefaultColors,
@@ -46,8 +46,8 @@ export const useAppController: UseAppController = () => {
   const setNumColorsCallback = useCallback((numColors: 1 | 2) => {
     const slug = numColors === 1 ? color1 : `${color1}-${color2}`;
     setNumColors(numColors);
-    replace(`/${slug}`);
-  }, [color1, color2, replace, setNumColors]);
+    push(`/${slug}`);
+  }, [color1, color2, push, setNumColors]);
 
   const [brighten, setBrighten] = useSessionStorageState<boolean>(STORAGE_BRIGHTEN, {
     defaultValue: true,
@@ -56,7 +56,7 @@ export const useAppController: UseAppController = () => {
   const initialize = useCallback((slug: string) => {
     const [slugColor1, slugColor2] = slug.split('-') as [string, string | undefined];
     if (!isKnownAppColor(slugColor1) || (slugColor2 != null && !isKnownAppColor(slugColor2))) {
-      replace('/');
+      push('/');
       return;
     }
     setNumColors(slugColor2 == null ? 1 : 2);
@@ -74,7 +74,7 @@ export const useAppController: UseAppController = () => {
       }
       return [newColor1, newColor2];
     });
-  }, [replace, setColors, setNumColors]);
+  }, [push, setColors, setNumColors]);
 
   const randomize = useCallback(() => {
     const validCombinations = combinations.filter(([newColor1, newColor2]) => (
@@ -83,8 +83,8 @@ export const useAppController: UseAppController = () => {
     ));
     const [newColor1, newColor2] = rand(validCombinations) as [AppColor, AppColor];
     setColors([newColor1, newColor2]);
-    replace(numColors === 1 ? newColor1 : `${newColor1}-${newColor2}`);
-  }, [color1, color2, numColors, replace, setColors]);
+    push(numColors === 1 ? newColor1 : `${newColor1}-${newColor2}`);
+  }, [color1, color2, numColors, push, setColors]);
 
   return {
     brighten,
