@@ -20,6 +20,7 @@
     "use-session-storage-state": "^18.2.0"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.8",
     "@storybook/addon-essentials": "^7.3.2",
     "@storybook/addon-interactions": "^7.3.2",
     "@storybook/addon-links": "^7.3.2",
