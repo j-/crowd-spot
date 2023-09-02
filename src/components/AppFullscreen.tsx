@@ -1,12 +1,16 @@
 import { AppColor } from '@/colors';
 import { useAppController } from '@/use-app-controller';
+import classNames from 'classnames';
 import { QRCodeSVG } from 'qrcode.react';
-import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import styles from './AppFullscreen.module.css';
 import { Brightness } from './Brightness';
 import { ColorBlock } from './ColorBlock';
 import Fullscreen, { FullscreenHandle } from './Fullscreen';
+import { IconButton } from './IconButton';
 import { Logo } from './Logo';
+import { IconShare } from './icons/IconShare';
+import { IconXMark } from './icons/IconXMark';
 
 export type AppFullscreenProps = React.PropsWithChildren<{
   color1: AppColor;
@@ -26,6 +30,15 @@ const AppFullscreen: React.ForwardRefRenderFunction<
   const lastScrollTop = useRef(0);
   const fullscreenElement = useRef<FullscreenHandle>(null);
   const { canonical } = useAppController();
+  const [canShare, setCanShare] = useState(false);
+
+  const shareData = useMemo<ShareData>(() => ({
+    url: canonical,
+    title: 'Crowd Spot',
+    text: color2 == null ?
+      `Look for the color ${color1}` :
+      `Look for the colors ${color1} and ${color2}`,
+  }), [canonical, color1, color2]);
 
   useImperativeHandle(ref, () => ({
     show() {
@@ -39,6 +52,10 @@ const AppFullscreen: React.ForwardRefRenderFunction<
   const handleClickClose = useCallback(() => {
     fullscreenElement.current?.hide();
   }, []);
+
+  const handleClickShare = useCallback(() => {
+    navigator.share(shareData);
+  }, [shareData]);
 
   const handleShow = useCallback(() => {
     document.documentElement.classList.add("fullscreen");
@@ -56,14 +73,22 @@ const AppFullscreen: React.ForwardRefRenderFunction<
     }
   }, []);
 
+  useEffect(() => {
+    setCanShare(
+      typeof navigator.canShare === 'function'  && navigator.canShare(shareData)
+    );
+  }, [shareData]);
+
   const controls = (
     <div className={styles.controls}>
       <QRCodeSVG
         value={canonical}
         includeMargin
-        // bgColor="transparent"
         className="rounded-md m-2"
       />
+      {canShare && <IconButton onClick={handleClickShare} className={styles.appButton}>
+        <IconShare />
+      </IconButton>}
     </div>
   );
 
@@ -77,32 +102,9 @@ const AppFullscreen: React.ForwardRefRenderFunction<
       {brighten && <Brightness />}
       <ColorBlock color={color1}>
         <Logo />
-        <button
-          className={styles.close}
-          type="button"
-          onClick={handleClickClose}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-              strokeWidth={6}
-              stroke="white"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-              strokeWidth={3}
-              stroke="currentColor"
-            />
-          </svg>
-        </button>
+        <IconButton onClick={handleClickClose} className={classNames(styles.appButton, 'absolute top-0 right-0')}>
+          <IconXMark />
+        </IconButton>
         {color2 ? null : controls}
       </ColorBlock>
       {color2 && (
