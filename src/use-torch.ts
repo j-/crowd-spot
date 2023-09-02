@@ -9,9 +9,11 @@ export const isTorchConstraintApplied = (track: MediaStreamTrack) => {
   return !!torchConstraint.torch;
 };
 
-export const isTorchConstraintSupported = () => {
-  return navigator.mediaDevices.getSupportedConstraints().torch;
-};
+export const isTorchConstraintSupported = () => (
+  typeof navigator.mediaDevices !== 'undefined' &&
+  typeof navigator.mediaDevices.getSupportedConstraints === 'function' &&
+  navigator.mediaDevices.getSupportedConstraints().torch
+);
 
 export const trackEnableTorch = (track: MediaStreamTrack) => (
   track.applyConstraints({
