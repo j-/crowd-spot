@@ -1,21 +1,25 @@
 'use client';
 
+import { appColorValueMap } from '@/colors';
+import { useFullscreen } from '@/use-fullscreen';
 import { useCallback, useId, useState } from 'react';
 import styles from './App.module.css';
 import AppFullscreen from './AppFullscreen';
 import { Logo } from './Logo';
-import { appColorValueMap } from '@/colors';
-import { useColors } from '@/use-colors';
-import { useFullscreen } from '@/use-fullscreen';
+import { useAppController } from '@/use-app-controller';
 
 const App: React.FC = () => {
   const id = useId();
-  const [numColors, setNumColors] = useState<1 | 2>(1);
-  const [brighten, setBrighten] = useState(true);
   const { ref: fullscreenElement, show: fullscreenShow } = useFullscreen();
-  const { color1, color2, randomize } = useColors();
-
-  const slug = numColors === 1 ? color1 : `${color1}-${color2}`;
+  const {
+    brighten,
+    color1,
+    color2,
+    numColors,
+    randomize,
+    setBrighten,
+    setNumColors,
+  } = useAppController();
 
   const handleClickRandom = useCallback(() => {
     randomize();
@@ -28,20 +32,13 @@ const App: React.FC = () => {
   return (
     <div>
       <Logo />
+
       <AppFullscreen
         ref={fullscreenElement}
         color1={color1}
         color2={numColors > 1 ? color2 : null}
         brighten={brighten}
       />
-
-      <h1>CrowdSpot</h1>
-
-      <p>
-        <code>{slug}</code>
-      </p>
-
-      <br  />
 
       <div className="w-50">
         <div className="form-control">
@@ -105,7 +102,7 @@ const App: React.FC = () => {
 
       <div>
         <button className="btn" type="button" onClick={handleClickRandom}>
-          Random color
+          Randomize
         </button>
         <button className="btn btn-primary" type="button" onClick={handleClickLaunch}>
           Launch

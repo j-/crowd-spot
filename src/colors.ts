@@ -1,3 +1,5 @@
+import { rand } from './rand';
+
 export enum AppColor {
   RED = 'red',
   ORANGE = 'orange',
@@ -6,6 +8,21 @@ export enum AppColor {
   BLUE = 'blue',
   PURPLE = 'purple',
   PINK = 'pink',
+};
+
+export const isKnownAppColor = (maybeAppColor: string): maybeAppColor is AppColor => {
+  switch (maybeAppColor) {
+    case AppColor.RED:
+    case AppColor.ORANGE:
+    case AppColor.YELLOW:
+    case AppColor.GREEN:
+    case AppColor.BLUE:
+    case AppColor.PURPLE:
+    case AppColor.PINK:
+      return true;
+    default:
+      return false;
+  }
 };
 
 export const appColorVarMap = {
@@ -61,3 +78,16 @@ export const combinations = [
   [AppColor.PINK, AppColor.RED],
   [AppColor.PINK, AppColor.YELLOW],
 ] as const;
+
+export const isValidColor2 = (color1: AppColor, maybeColor2: AppColor) => {
+  return combinations
+    .filter((combination) => combination[0] === color1)
+    .some((combination) => combination[1] === maybeColor2);
+};
+
+export const getRandomValidColor2 = (color1: AppColor) => {
+  const validCombinations = combinations
+    .filter((combination) => combination[0] === color1);
+  const randomCombination = rand(validCombinations);
+  return randomCombination[1];
+};
