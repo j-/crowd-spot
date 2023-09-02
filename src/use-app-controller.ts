@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import useSessionStorageState from 'use-session-storage-state';
 import {
   AppColor,
@@ -17,6 +17,7 @@ import { rand } from './rand';
 
 export type AppState = {
   brighten: boolean;
+  canonical: string;
   color1: AppColor;
   color2: AppColor;
   initialize: (slug: string) => void;
@@ -86,8 +87,14 @@ export const useAppController: UseAppController = () => {
     push(numColors === 1 ? newColor1 : `${newColor1}-${newColor2}`);
   }, [color1, color2, numColors, push, setColors]);
 
+  const canonical = useMemo(() => {
+    const slug = numColors === 1 ? color1 : `${color1}-${color2}`;
+    return typeof window === 'undefined' ? slug : `${window.location.origin}/${slug}`;
+  }, [color1, color2, numColors]);
+
   return {
     brighten,
+    canonical,
     color1,
     color2,
     initialize,

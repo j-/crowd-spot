@@ -1,4 +1,5 @@
 import { AppColor } from '@/colors';
+import { useAppController } from '@/use-app-controller';
 import { QRCodeSVG } from 'qrcode.react';
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import styles from './AppFullscreen.module.css';
@@ -24,6 +25,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
 > = ({ color1, color2, brighten }, ref) => {
   const lastScrollTop = useRef(0);
   const fullscreenElement = useRef<FullscreenHandle>(null);
+  const { canonical } = useAppController();
 
   useImperativeHandle(ref, () => ({
     show() {
@@ -57,7 +59,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
   const controls = (
     <div>
       <QRCodeSVG
-        value="https://reactjs.org/"
+        value={canonical}
         includeMargin
         // bgColor="transparent"
         className="rounded-md m-2"
