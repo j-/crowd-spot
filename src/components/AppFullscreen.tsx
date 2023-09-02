@@ -92,12 +92,25 @@ const AppFullscreen: React.ForwardRefRenderFunction<
         includeMargin
         className="rounded-md m-4 mr-auto"
       />
-      {canShare && <IconButton onClick={handleClickShare} className={styles.appButton}>
-        <IconShare />
-      </IconButton>}
-      {canTorch && <IconButton onClick={toggleTorch} className={styles.appButton} disabled={isDisabled}>
-        <IconBolt />
-      </IconButton>}
+      {canShare && (
+        <IconButton
+          onClick={handleClickShare}
+          className={classNames(styles.appButton, 'tooltip')}
+          data-tip="Share"
+        >
+          <IconShare />
+        </IconButton>
+      )}
+      {canTorch && (
+        <IconButton
+          onClick={toggleTorch}
+          className={classNames(styles.appButton, 'tooltip')}
+          disabled={isDisabled}
+          data-tip={isDisabled ? undefined : 'Toggle torch'}
+        >
+          <IconBolt />
+        </IconButton>
+      )}
     </div>
   );
 
@@ -111,7 +124,11 @@ const AppFullscreen: React.ForwardRefRenderFunction<
       {brighten && <Brightness />}
       <ColorBlock color={color1}>
         <Logo />
-        <IconButton onClick={handleClickClose} className={classNames(styles.appButton, 'absolute top-0 right-0')}>
+        <IconButton
+          onClick={handleClickClose}
+          className={classNames(styles.appButton, 'absolute top-0 right-0 tooltip tooltip-bottom')}
+          data-tip="Close"
+        >
           <IconXMark />
         </IconButton>
         {color2 ? null : controls}
