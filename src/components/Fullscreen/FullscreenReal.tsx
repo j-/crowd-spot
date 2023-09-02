@@ -25,8 +25,10 @@ const FullscreenReal: React.ForwardRefRenderFunction<
       onShow?.();
     },
     hide() {
-      document.exitFullscreen();
-      onHide?.();
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+        onHide?.();
+      }
     },
   }));
 
@@ -35,22 +37,24 @@ const FullscreenReal: React.ForwardRefRenderFunction<
     const element = fullscreenElementRef.current;
     if (!element) return;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        document.exitFullscreen();
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement) {
+        onShow?.();
+      } else {
         onHide?.();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
 
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onHide]);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, [onHide, onShow]);
 
   return (
     <div
-      className={`FullscreenReal ${className || ''}`}
+      className={className}
       ref={fullscreenElementRef}
       hidden={!visible}
     >
