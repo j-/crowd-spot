@@ -15,6 +15,7 @@ export const Primary = () => {
   return (
     <>
       <button
+        className="btn"
         type="button"
         onClick={() => {
           fullscreenFakeElement.current?.show();
@@ -25,6 +26,7 @@ export const Primary = () => {
       <FullscreenFake ref={fullscreenFakeElement}>
         <div style={{ height: '100%', backgroundColor: 'hsl(200, 80%, 80%)' }}>
           <button
+            className="btn m-4"
             type="button"
             onClick={() => {
               fullscreenFakeElement.current?.hide();
