@@ -1,5 +1,6 @@
 import { AppColor } from '@/colors';
 import { useAppController } from '@/use-app-controller';
+import { useTorch } from '@/use-torch';
 import classNames from 'classnames';
 import { QRCodeSVG } from 'qrcode.react';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -9,6 +10,7 @@ import { ColorBlock } from './ColorBlock';
 import Fullscreen, { FullscreenHandle } from './Fullscreen';
 import { IconButton } from './IconButton';
 import { Logo } from './Logo';
+import { IconBolt } from './icons/IconBolt';
 import { IconShare } from './icons/IconShare';
 import { IconXMark } from './icons/IconXMark';
 
@@ -31,6 +33,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
   const fullscreenElement = useRef<FullscreenHandle>(null);
   const { canonical } = useAppController();
   const [canShare, setCanShare] = useState(false);
+  const { toggleTorch, turnOff } = useTorch();
 
   const shareData = useMemo<ShareData>(() => ({
     url: canonical,
@@ -46,6 +49,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
     },
     hide() {
       fullscreenElement.current?.hide();
+      turnOff();
     },
   }));
 
@@ -89,6 +93,9 @@ const AppFullscreen: React.ForwardRefRenderFunction<
       {canShare && <IconButton onClick={handleClickShare} className={styles.appButton}>
         <IconShare />
       </IconButton>}
+      <IconButton onClick={toggleTorch} className={styles.appButton}>
+        <IconBolt />
+      </IconButton>
     </div>
   );
 
