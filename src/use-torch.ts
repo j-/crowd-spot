@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const isTorchContraintApplied = (track: MediaStreamTrack) => {
   const allConstraints = track.getConstraints();
@@ -30,6 +30,7 @@ export const trackToggleTorch = (track: MediaStreamTrack) => {
 
 export const useTorch = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [canTorch, setCanTorch] = useState(false);
 
   const requestTurnOn = useCallback(async () => {
     if (stream) {
@@ -76,5 +77,9 @@ export const useTorch = () => {
     }
   }, [stream]);
 
-  return { requestTurnOn, turnOff, toggleTorch, destroyMedia };
+  useEffect(() => {
+    setCanTorch(navigator.mediaDevices.getSupportedConstraints().torch);
+  }, []);
+
+  return { canTorch, requestTurnOn, turnOff, toggleTorch, destroyMedia };
 };

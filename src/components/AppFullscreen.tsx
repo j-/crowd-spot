@@ -33,7 +33,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
   const fullscreenElement = useRef<FullscreenHandle>(null);
   const { canonical } = useAppController();
   const [canShare, setCanShare] = useState(false);
-  const { toggleTorch, destroyMedia } = useTorch();
+  const { canTorch, toggleTorch, destroyMedia } = useTorch();
 
   const shareData = useMemo<ShareData>(() => ({
     url: canonical,
@@ -94,9 +94,9 @@ const AppFullscreen: React.ForwardRefRenderFunction<
       {canShare && <IconButton onClick={handleClickShare} className={styles.appButton}>
         <IconShare />
       </IconButton>}
-      <IconButton onClick={toggleTorch} className={styles.appButton}>
+      {canTorch && <IconButton onClick={toggleTorch} className={styles.appButton}>
         <IconBolt />
-      </IconButton>
+      </IconButton>}
     </div>
   );
 
