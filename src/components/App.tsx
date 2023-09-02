@@ -31,9 +31,9 @@ const App: React.FC = () => {
   }, [fullscreenShow]);
 
   return (
-    <div className="container my-10 mx-auto">
+    <div className="max-w-[60ch] p-5 card bg-base-100 shadow-xl border border-primary my-10 mx-3 sm:mx-auto">
       <Link href="/">
-        <Logo />
+        <Logo className="my-5" />
       </Link>
 
       <AppFullscreen
@@ -43,7 +43,7 @@ const App: React.FC = () => {
         brighten={brighten}
       />
 
-      <div className="w-50">
+      <div className="my-3">
         <div className="form-control">
           <label htmlFor={`${id}-num-colors-1`} className="label gap-2 cursor-pointer">
             <div className={styles.swatch}>
@@ -86,7 +86,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="form-control">
+      <div className="form-control my-3">
         <label htmlFor={`${id}-brighten`} className="label gap-2 cursor-pointer">
           <input
             id={`${id}-brighten`}
@@ -103,7 +103,7 @@ const App: React.FC = () => {
         </label>
       </div>
 
-      <div>
+      <div className="my-5">
         <button className="btn" type="button" onClick={handleClickRandom}>
           Randomize
         </button>
