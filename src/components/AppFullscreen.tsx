@@ -90,7 +90,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
       <QRCodeSVG
         value={canonical}
         includeMargin
-        className="rounded-md m-2"
+        className="rounded-md m-4 mr-auto"
       />
       {canShare && <IconButton onClick={handleClickShare} className={styles.appButton}>
         <IconShare />
