@@ -33,7 +33,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
   const fullscreenElement = useRef<FullscreenHandle>(null);
   const { canonical } = useAppController();
   const [canShare, setCanShare] = useState(false);
-  const { toggleTorch, turnOff } = useTorch();
+  const { toggleTorch, destroyMedia } = useTorch();
 
   const shareData = useMemo<ShareData>(() => ({
     url: canonical,
@@ -49,13 +49,14 @@ const AppFullscreen: React.ForwardRefRenderFunction<
     },
     hide() {
       fullscreenElement.current?.hide();
-      turnOff();
+      destroyMedia();
     },
   }));
 
   const handleClickClose = useCallback(() => {
     fullscreenElement.current?.hide();
-  }, []);
+    destroyMedia();
+  }, [destroyMedia]);
 
   const handleClickShare = useCallback(() => {
     navigator.share(shareData);
