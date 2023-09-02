@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-export const isTorchContraintApplied = (track: MediaStreamTrack) => {
+export const isTorchConstraintApplied = (track: MediaStreamTrack) => {
   const allConstraints = track.getConstraints();
   const torchConstraint = allConstraints.advanced?.find((constraint) => (
     'torch' in constraint
@@ -9,10 +9,18 @@ export const isTorchContraintApplied = (track: MediaStreamTrack) => {
   return !!torchConstraint.torch;
 };
 
+export const isTorchConstraintSupported = () => {
+  return navigator.mediaDevices.getSupportedConstraints().torch;
+};
+
 export const trackEnableTorch = (track: MediaStreamTrack) => {
   track.applyConstraints({
     advanced: [{ torch: true }],
   });
+};
+
+export const streamEnableTorch = (stream: MediaStream) => {
+  stream.getVideoTracks().forEach(trackEnableTorch);
 };
 
 export const trackDisableTorch = (track: MediaStreamTrack) => {
@@ -21,11 +29,19 @@ export const trackDisableTorch = (track: MediaStreamTrack) => {
   });
 };
 
+export const streamDisableTorch = (stream: MediaStream) => {
+  stream.getVideoTracks().forEach(trackDisableTorch);
+};
+
 export const trackToggleTorch = (track: MediaStreamTrack) => {
-  const torch = isTorchContraintApplied(track);
+  const torch = isTorchConstraintApplied(track);
   track.applyConstraints({
     advanced: [{ torch: !torch }]
   });
+};
+
+export const streamToggleTorch = (stream: MediaStream) => {
+  stream.getVideoTracks().forEach(trackToggleTorch);
 };
 
 export const useTorch = () => {
@@ -34,7 +50,7 @@ export const useTorch = () => {
 
   const requestTurnOn = useCallback(async () => {
     if (stream) {
-      stream.getVideoTracks().forEach(trackEnableTorch);
+      streamEnableTorch(stream);
       return;
     }
 
@@ -54,18 +70,21 @@ export const useTorch = () => {
     });
 
     setStream(media);
-    media?.getVideoTracks().forEach(trackEnableTorch);
+    streamEnableTorch(media);
   }, [stream]);
 
   const turnOff = useCallback(() => {
-    stream?.getVideoTracks().forEach(trackDisableTorch);
+    if (stream) {
+      streamDisableTorch(stream);
+    }
   }, [stream]);
 
   const toggleTorch = useCallback(() => {
-    if (!stream) {
+    if (stream) {
+      streamToggleTorch(stream);
+    } else {
       return requestTurnOn();
     }
-    stream.getVideoTracks().forEach(trackToggleTorch);
   }, [requestTurnOn, stream]);
 
   const destroyMedia = useCallback(() => {
@@ -78,7 +97,7 @@ export const useTorch = () => {
   }, [stream]);
 
   useEffect(() => {
-    setCanTorch(navigator.mediaDevices.getSupportedConstraints().torch);
+    setCanTorch(isTorchConstraintSupported);
   }, []);
 
   return { canTorch, requestTurnOn, turnOff, toggleTorch, destroyMedia };
