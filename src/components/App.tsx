@@ -30,7 +30,7 @@ const App: React.FC = () => {
   }, [fullscreenShow]);
 
   return (
-    <div>
+    <div className="container my-10 mx-auto">
       <Logo />
 
       <AppFullscreen
