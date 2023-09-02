@@ -24,4 +24,5 @@ RUN npm run build
 RUN npm prune --omit=dev
 
 FROM nginx:stable-alpine
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/out /usr/share/nginx/html
