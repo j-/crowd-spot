@@ -1,3 +1,4 @@
+import Typography from '@tailwindcss/typography';
 import DaisyUI from 'daisyui';
 import type { Config } from 'tailwindcss';
 
@@ -10,6 +11,7 @@ const config: Config = {
   theme: {},
   plugins: [
     DaisyUI,
+    Typography,
   ],
 };
 
