@@ -1,12 +1,13 @@
 'use client';
 
 import { appColorValueMap } from '@/colors';
+import { useAppController } from '@/use-app-controller';
 import { useFullscreen } from '@/use-fullscreen';
-import { useCallback, useId, useState } from 'react';
+import Link from 'next/link';
+import { useCallback, useId } from 'react';
 import styles from './App.module.css';
 import AppFullscreen from './AppFullscreen';
 import { Logo } from './Logo';
-import { useAppController } from '@/use-app-controller';
 
 const App: React.FC = () => {
   const id = useId();
@@ -31,7 +32,9 @@ const App: React.FC = () => {
 
   return (
     <div className="container my-10 mx-auto">
-      <Logo />
+      <Link href="/">
+        <Logo />
+      </Link>
 
       <AppFullscreen
         ref={fullscreenElement}
