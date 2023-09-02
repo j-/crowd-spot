@@ -57,7 +57,7 @@ const AppFullscreen: React.ForwardRefRenderFunction<
   }, []);
 
   const controls = (
-    <div>
+    <div className={styles.controls}>
       <QRCodeSVG
         value={canonical}
         includeMargin
