@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useCallback, useId } from 'react';
 import styles from './App.module.css';
 import AppFullscreen from './AppFullscreen';
+import { Favicon } from './Favicon';
 import { Logo } from './Logo';
 
 const App: React.FC = () => {
@@ -35,6 +36,8 @@ const App: React.FC = () => {
       <Link href="/">
         <Logo className="my-5" />
       </Link>
+
+      <Favicon />
 
       <AppFullscreen
         ref={fullscreenElement}

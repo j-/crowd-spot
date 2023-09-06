@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useSessionStorageState from 'use-session-storage-state';
 import {
   AppColor,
+  appColorValueMap,
+  appColorVarMap,
   combinations,
   getRandomValidColor2,
   isKnownAppColor,
@@ -16,6 +18,8 @@ import {
 import { rand } from './rand';
 
 export type AppState = {
+  appColor1: string;
+  appColor2: string;
   brighten: boolean;
   canonical: string;
   color1: AppColor;
@@ -35,10 +39,25 @@ const getDefaultColors = () => rand(combinations) as [AppColor, AppColor];
 
 export const useAppController: UseAppController = () => {
   const { push } = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
   const [[color1, color2], setColors] = useSessionStorageState<[AppColor, AppColor]>(STORAGE_COLORS, {
     defaultValue: getDefaultColors,
   });
+
+  const appColor1 = useMemo(() => {
+    if (!isMounted) return color1;
+    const appColor1 = appColorVarMap[color1];
+    const style = window.getComputedStyle(document.documentElement);
+    return style.getPropertyValue(appColor1);
+  }, [color1, isMounted]);
+
+  const appColor2 = useMemo(() => {
+    if (!isMounted) return color2;
+    const appColor2 = appColorVarMap[color2];
+    const style = window.getComputedStyle(document.documentElement);
+    return style.getPropertyValue(appColor2);
+  }, [color2, isMounted]);
 
   const [numColors, setNumColors] = useSessionStorageState<1 | 2>(STORAGE_NUM_COLORS, {
     defaultValue: 1,
@@ -92,7 +111,13 @@ export const useAppController: UseAppController = () => {
     return typeof window === 'undefined' ? slug : `${window.location.origin}/${slug}`;
   }, [color1, color2, numColors]);
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return {
+    appColor1,
+    appColor2,
     brighten,
     canonical,
     color1,
