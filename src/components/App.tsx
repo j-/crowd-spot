@@ -9,11 +9,13 @@ import styles from './App.module.css';
 import AppFullscreen from './AppFullscreen';
 import { Favicon } from './Favicon';
 import { Logo } from './Logo';
+import Head from 'next/head';
 
 const App: React.FC = () => {
   const id = useId();
   const { ref: fullscreenElement, show: fullscreenShow } = useFullscreen();
   const {
+    appColor1,
     brighten,
     color1,
     color2,
@@ -38,6 +40,10 @@ const App: React.FC = () => {
       </Link>
 
       <Favicon />
+
+      <Head>
+        <meta name="theme-color" content={appColor1} />
+      </Head>
 
       <AppFullscreen
         ref={fullscreenElement}
