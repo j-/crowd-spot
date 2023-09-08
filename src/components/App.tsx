@@ -3,13 +3,13 @@
 import { appColorValueMap } from '@/colors';
 import { useAppController } from '@/use-app-controller';
 import { useFullscreen } from '@/use-fullscreen';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useCallback, useId } from 'react';
 import styles from './App.module.css';
 import AppFullscreen from './AppFullscreen';
 import { Favicon } from './Favicon';
 import { Logo } from './Logo';
-import Head from 'next/head';
 
 const App: React.FC = () => {
   const id = useId();
